@@ -18,7 +18,7 @@
 $GLOBALS['TL_DCA']['tl_news']['fields']['source']['options'][] = 'singlefile';
 $GLOBALS['TL_DCA']['tl_news']['fields']['singlefileSRC'] = array
 (
-		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['singleSRC'],
+		'label'                   => &$GLOBALS['TL_LANG']['tl_news']['srcSinglefile'],
 		'exclude'                 => true,
 		'inputType'               => 'fileTree',
 		'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'mandatory'=>true, 'tl_class'=>'clr'),
