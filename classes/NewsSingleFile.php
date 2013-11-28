@@ -29,6 +29,8 @@ class NewsSingleFile
 {
 	public function cb_parseTemplate(\Template &$objTemplate)
 	{
+		global $objPage;
+
 		if (strpos($objTemplate->getName(), 'news_' ) === 0)
 		{
 			if ($objTemplate->source == 'singlefile')
@@ -48,27 +50,25 @@ class NewsSingleFile
 						throw new Exception("download not allowed by extension");
 					}
 					$objFile = new \File($modelFile->path, true);
-					$strHref = \Environment::get('request');
 
-					// Remove an existing file parameter (see #5683)
-					if (preg_match('/(&(amp;)?|\?)file=/', $strHref))
-					{
-						$strHref = preg_replace('/(&(amp;)?|\?)file=[^&]+/', '', $strHref);
-					}
-
-					$strHref .= (($GLOBALS['TL_CONFIG']['disableAlias'] || strpos($strHref, '?') !== false) ? '&amp;' : '?') . 'file=' . \System::urlEncode($objFile->value);
+					$strHref = \System::urlEncode($objFile->value);
 				}
 				catch (\Exception $e)
 				{
 					$strHref = "";
 				}
 
-				$objTemplate->more = sprintf('<a href="%s" title="%s">%s</a>',
+				$target = ($objPage->outputFormat == 'xhtml') ? ' onclick="return !window.open(this.href)"' : ' target="_blank"';
+
+
+				$objTemplate->more = sprintf('<a %s href="%s" title="%s">%s</a>',
+						$target,
 						$strHref,
 						specialchars(sprintf($GLOBALS['TL_LANG']['MSC']['open'], $objFile->basename)),
 						$GLOBALS['TL_LANG']['MSC']['more']);
 
-				$objTemplate->linkHeadline = sprintf('<a href="%s" title="%s">%s</a>',
+				$objTemplate->linkHeadline = sprintf('<a %s href="%s" title="%s">%s</a>',
+						$target,
 						$strHref,
 						specialchars(sprintf($GLOBALS['TL_LANG']['MSC']['open'], $objFile->basename)),
 						$objTemplate->headline);
